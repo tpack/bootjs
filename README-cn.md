@@ -25,9 +25,9 @@ BootJs 是一个适合 Web 端的组件加载器。它能让前端将公用元�
 ### 文件包含
 
     <script>
-      include("./include/page.inc"); // include HTML fragment(same as <? include() ?> in php)
-      include("./assets/func.js");   // include JavaScript file(same as import in java)
-      include("./assets/func.css");  // include CSS file
+      include("./include/page.inc"); // 包含其它 HTML 片段（相当于 php 中的 include 函数）
+      include("./assets/func.js");   // 包含其它 JavaScript 片段（相当于 java 的 import）
+      include("./assets/func.css");  // 包含其它 CSS 片段
     </script>
 
 ### 异步载入其它模块
