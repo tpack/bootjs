@@ -61,6 +61,7 @@ After build, include will be replaced and require will load the packed file rath
 ## Report bugs
 
 [View issues](https://github.com/bootjs/bootjs/issues)
+
 [New issue](https://github.com/bootjs/bootjs/issues/new)
 
 ## License
