@@ -1,11 +1,11 @@
 bootjs
 ======
 
-BootJs 是一个适合 Web 端的组件加载器。它能让前端将公用元素做成组件，并按需加载组件快速完成页面。
+BootJs 是一个扩展的 AMD 模块加载器。它能让前端将公用元素做成公用模块，并按需加载模块快速完成页面。
 
 ## 特性
 
-1. 除了支持 js，BootJs 还支持 css、html的组件化。
+1. 除了支持 js，BootJs 还支持载入 css、html。
 2. BootJs 兼容现有的模块化代码，可直接加载 CMD 或 AMD 模块。
 3. 通过发布工具将组件打包上线。并且发布工具没有复杂的配置和约束。
 
@@ -22,7 +22,7 @@ BootJs 是一个适合 Web 端的组件加载器。它能让前端将公用元�
      |    `-- page.inc
      |-- page.html
     
-### 文件包含
+### 直接包含其它文件
 
     <script>
       include("./include/page.inc"); // 包含其它 HTML 片段（相当于 php 中的 include 函数）
