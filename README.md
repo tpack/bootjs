@@ -1,7 +1,7 @@
 bootjs
 ======
 
-BootJs is a module loader for browsers。It allows front-end developers creating pages quickly with various pre-developed modules.
+BootJs is an extended module loader for browsers. It allows front-end developers creating pages quickly with various pre-developed modules.
 
 ## Features
 
@@ -15,11 +15,11 @@ BootJs is a module loader for browsers。It allows front-end developers creating
 - Chrome 4+         ✔
 - Firefox 2+        ✔
 - Safari 3.2+       ✔
-- Opera 10.5+         ✔
+- Opera 10.5+       ✔
 
 ## Examples
 
-For Examples we have such files:
+Here we have such files:
     
     test/
      |-- assets
@@ -30,7 +30,7 @@ For Examples we have such files:
      |    `-- page.inc
      |-- page.html
     
-1. Include Other Assets
+### Include Other Assets
 
     <script>
       include("./include/page.inc"); // include HTML fragment(same as <? include() ?> in php)
@@ -38,7 +38,7 @@ For Examples we have such files:
       include("./assets/func.css");  // include CSS file
     </script>
 
-2. Load modules asyncly：
+### Load modules asyncly：
 
     require('./assets/func.js');
     
@@ -50,7 +50,7 @@ The content of func.js is：
     
 func.js should better follow CommonJs,or it fails to require other modules.
 
-3. Build
+### Build
 
 Using bootjs build tools, all modules required can be packed.
 
