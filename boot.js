@@ -87,7 +87,8 @@
 		},
 		
 		getExtension: function(url) {
-			return /js$/.test(url) ? ".js" : /ss$/.test(url) ? ".css" : ".html";
+			var match = /\..+$/.exec(url);
+			return match && (match[1] in include.fileExtensions) ? include.fileExtensions[match[1]] : ".html";
 		},
 		
 		/**
@@ -211,7 +212,7 @@
 	 */
 	function exports(varName, value) {
 		if(typeof define === "function" && define.amd){
-			define(varName, [], value);
+			define(varName, [], arguments.length === 1 ? window[varName] : value);
 		}
 	}
 	
