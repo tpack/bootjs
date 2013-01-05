@@ -1,13 +1,14 @@
 bootjs
 ======
 
-BootJs is an extended AMD module loader for browsers. It allows front-end developers creating pages quickly with various pre-developed modules.
+BootJs is a synchroniaed module loader for browsers. Differs from asynchronous module loaders such as AMD/CMD impl, it tries to find an easiest way to make modularize possible ---- DONOT need to rewrite your code, just specified the dependencies simplely and bootjs will make every things right.
 
 ## Features
 
 1. Besides js，BootJs supports loading css、html as well.
-2. Compatible with any existing js/css/html files or CMD/AMD modules.
+2. Compatible with any existing js/css/html files. All files can be generated as an AMD/CMD module.
 3. No extra config files or constraint! 
+4. Not support cross domain loading due to limit of XMLHttpRequest.
 
 ## Examples
 
@@ -22,33 +23,25 @@ Here we have such files:
      |    `-- page.inc
      |-- page.html
     
-### Include Other Assets
+In page.html, use code below:
 
     <script>
-      include("./include/page.inc"); // include HTML fragment(same as <? include() ?> in php)
-      include("./assets/func.js");   // include JavaScript file(same as import in java)
-      include("./assets/func.css");  // include CSS file
+      include("func.js");   // include JavaScript file(same as import in java)
+      include("func.css");  // include CSS file
+      include("~/include/page.inc"); // include HTML fragment(same as <? include() ?> in php), in which ~ equals to the path of current html.
+	  
+	  // "func.js" is already executed, we can use variables in "func.js" directly here.
     </script>
+	
+For more information, view the [document page](https://github.com/bootjs/bootjs/wiki/api).
 
-### Load modules asynchronously：
+## Build
 
-    require('./assets/func.js');
-    
-The content of func.js is：
-
-    define(function()){
-         return [1, 2, 3];
-    });
-    
-func.js should better follow CommonJs,or it fails to require other modules.
-
-### Build
-
-Using bootjs build tools, all modules required can be packed.
+Using bootjs build tools, all includes will be replaced by content relatived.
 
     $ bootjs build test/
-    
-After build, include will be replaced and require will load the packed file rather than the source file.
+	
+For more information, view the [document page](https://github.com/bootjs/bootjs/wiki/build).
 
 ## Compatibility
 
@@ -66,7 +59,7 @@ After build, include will be replaced and require will load the packed file rath
 
 ## License
 
-BootJs is released under the terms of the [MIT License](http://seajs.org/LICENSE.md).
+BootJs is released under the terms of the [MIT License](LICENSE.md).
 
 
 

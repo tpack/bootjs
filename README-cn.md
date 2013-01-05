@@ -1,13 +1,14 @@
 bootjs
 ======
 
-BootJs 是一个适合 Web 端的组件加载器。它能让前端将公用元素做成组件，并按需加载组件快速完成页面。
+BootJs 是一个适合 Web 端的同步组件加载器。不同于异步加载器(如 requirejs/seajs)，它以最少的成本来实现模块化的开发————无需对已有代码作任何改动，只需添加一行依赖列表，bootjs就可以自动处理全部的依赖关系。
 
 ## 特性
 
 1. 除了支持 js，BootJs 还支持 css、html的组件化。
-2. BootJs 兼容现有的模块化代码，可直接加载 CMD 或 AMD 模块。
+2. BootJs 兼容现有的任何代码。所有文件都可转换为 CMD 或 AMD 模块。
 3. 通过发布工具将组件打包上线。并且发布工具没有复杂的配置和约束。
+4. 由于 XMLHttpRequest 的限制，BootJs 不支持跨域加载。
 
 ## 示例
 
@@ -22,33 +23,23 @@ BootJs 是一个适合 Web 端的组件加载器。它能让前端将公用元�
      |    `-- page.inc
      |-- page.html
     
-### 文件包含
+在 page.html 中使用如下代码：
 
     <script>
-      include("./include/page.inc"); // include HTML fragment(same as <? include() ?> in php)
-      include("./assets/func.js");   // include JavaScript file(same as import in java)
-      include("./assets/func.css");  // include CSS file
+      include("func.js");   // 包含其它 JavaScript 片段（相当于 java 的 import）
+      include("func.css");  // 包含其它 CSS 片段
+      include("~/include/page.inc"); // 包含其它 HTML 片段（相当于 php 中的 include 函数）, 其中 ~ 表示当前 HTML 的路径。
     </script>
+	
+更多信息查看[文档页面](https://github.com/bootjs/bootjs/wiki/api)。
 
-### 异步载入其它模块
+## 发布
 
-    require('./assets/func.js');
-    
-func.js 内容如下：
-
-    define(function()){
-         return [1, 2, 3];
-    });
-    
-func.js 最好遵循 CommonJs(或AMD) 规范，否则它将不能使用 require 功能。
-
-### 发布
-
-通过 bootjs 发布工具，可以将模块合并以减少请求数。
+通过 bootjs 发布工具，可以将 include 合并掉以减少请求数。
 
     $ bootjs build test/
-    
-发布后，include 会被内联，require 只请求合并后的单一文件。
+	
+更多信息查看[文档页面](https://github.com/bootjs/bootjs/wiki/build)。
 
 ## 兼容性
 
@@ -66,6 +57,6 @@ func.js 最好遵循 CommonJs(或AMD) 规范，否则它将不能使用 require 
 
 ## 协议
 
-BootJs 在 [MIT 协议](http://seajs.org/LICENSE.md) 下发布。
+BootJs 在 [MIT 协议](LICENSE.md) 下发布。
 
 
