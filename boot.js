@@ -94,7 +94,7 @@
 		 * by default.
 		 */
 		getExtension: function(url) {
-			var match = /\..+$/.exec(url);
+			var match = /\.\w+$/.exec(url);
 			return match && (match[0] in include.fileExtensions) ? match[0] : ".html";
 		},
 		

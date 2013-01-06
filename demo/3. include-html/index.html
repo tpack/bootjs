@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Boot.js</title>
+    <script src="../../boot.js" type="text/javascript"></script>
+</head>
+<body>
+	<h3>Include .html files</h3>
+	
+	<script>include("~/header.inc");</script>
+	
+	<p>This content of header and footer is loaded form header.inc and footer.inc which can be reused for most of pages.</p>
+	
+	<p>Donot try to use include in included files, it may cause unknown problems.</p>
+	
+	<script>include("~/footer.inc");</script>
+</body>
+</html>
