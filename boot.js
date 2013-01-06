@@ -16,7 +16,7 @@
 	}
 	
 	/**
-	 * Get the absolute url.
+	 * Get the absolute url of specified script or link node.
 	 */
 	function getAbsoluteUrl(node, attrName) {
 		// Use getAttribute('src', 4) instead in IE 6-7 to get absolute url.
@@ -31,9 +31,10 @@
 			extension = include.getExtension(url);
 		
 		// Do not load twice.
-		if(!include.checkLoaded(url, extension)){
+		if(!include.isLoaded(url, extension)){
 			include.fileExtensions[extension](url);
 			
+			// Mark as loaded.
 			include.loaded.push(url);
 		}
 	}
@@ -46,9 +47,9 @@
 		loaded: [],
 		
 		/**
-		 * The root path used by include.toUrl.
+		 * The root path used by include. Default to the parent directory of boot.js.
 		 */
-		rootPath: (function () {
+		basePath: (function () {
 			try {
 				var scripts = document.getElementsByTagName("script");
 				return getAbsoluteUrl(scripts[scripts.length - 1], 'src').replace(/\/[^\/]*$/, "/");
@@ -58,16 +59,16 @@
 		})(),
 	
 		/**
-		 * Get the actually url of specified modulePath.
+		 * Get the actually url of specified module path.
 		 */
 		toUrl: function(modulePath) {
 			
 			// If modulePath starts with '~', replace '~' with current html path.
-			// If donot use relative path. Concat modulePath with rootPath.
+			// If modulePath is relative path. Concat modulePath with basePath.
 			if(modulePath.charAt(0) === '~') {
-				modulePath = modulePath.replace('~', location.protocol + '//' + location.host + location.pathname.replace(/\/[^\/]*$/, "/"));
+				modulePath = modulePath.replace('~', location.protocol + '//' + location.host + location.pathname.replace(/\/[^\/]*$/, ""));
 			} else if(!/:\/\//.test(modulePath)) {
-				modulePath = include.rootPath + modulePath;
+				modulePath = include.basePath + modulePath;
 			}
 			
 			// Remove "/./" in path
@@ -86,18 +87,25 @@
 			return modulePath;
 		},
 		
+		/**
+		 * Get the extension of specified url.
+		 * @return {String} The extension that starts with a dot. If the actual 
+		 * extension is not a member of include.fileExtensions, it returns ".html" 
+		 * by default.
+		 */
 		getExtension: function(url) {
 			var match = /\..+$/.exec(url);
-			return match && (match[1] in include.fileExtensions) ? include.fileExtensions[match[1]] : ".html";
+			return match && (match[0] in include.fileExtensions) ? match[0] : ".html";
 		},
 		
 		/**
-		 * Check wheather specified url is loaded.
+		 * Check wheather the specified url has been loaded.
 		 */
-		checkLoaded: function(url, extension){
+		isLoaded: function(url, extension){
 			
 			var tagName, attrName, nodes, i, nodeUrl;
-		
+			
+			// IE6-7 does not support array.indexOf .
 			for(i = 0; i < include.loaded.length; i++){
 				if(include.loaded[i] == url) {
 					return true;
@@ -126,6 +134,9 @@
 			return false;
 		},
 	
+		/**
+		 * Get the content of the specified url synchronously.
+		 */
 		getText: function (url) {
 
 			// Create new XMLHttpRequest instance(use ActiveXObject instead in IE 6-8).
@@ -166,15 +177,22 @@
 
 		},
 		
+		/**
+		 * All supported loaders for variant extensions.
+		 */
 		fileExtensions: {
 			'.js': function(url) {
 				var sourceCode = include.getText(url);
 
 				if (sourceCode) {
 					try {
+						
+						// Eval code in global context.
 						if (window.execScript) {
 							window.execScript(sourceCode);
 						} else {
+						
+							// Donot use window.eval due to some code compressors hate it.
 							window["eval"].call(window, sourceCode);
 						}
 					} catch (e) {
@@ -185,7 +203,7 @@
 			'.css': function(url) {
 					
 				// Js may executed before css is ready. We donot hack here to save bytes, 
-				// just wrap js with dom ready callback if needed.
+				// just wrap js with dom ready callback if the situation happens.
 				return (document.head || document.getElementsByTagName("HEAD")[0] || document.documentElement).appendChild(extend(document.createElement('link'), {
 					href: url,
 					rel: 'stylesheet',
@@ -194,14 +212,16 @@
 			},
 			'.html': function(url) {
 				var sourceCode = include.getText(url);
-				document.write(sourceCode);
+				if(sourceCode) {
+					document.write(sourceCode);
+				}
 			}
 		}
 	
 	});
 	
 	/**
-	 * Exculde a path so that specified path would not be loaded.
+	 * Exculde a path so that the specified path would be skipped by include.
 	 */
 	function exclude(modulePath) {
 		include.loaded.push(include.toUrl(modulePath));
@@ -212,7 +232,7 @@
 	 */
 	function exports(varName, value) {
 		if(typeof define === "function" && define.amd){
-			define(varName, [], arguments.length === 1 ? window[varName] : value);
+			define(varName, [], value);
 		}
 	}
 	
