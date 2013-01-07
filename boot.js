@@ -153,15 +153,7 @@
 				if ((status >= 200 && status < 300) || status == 304 || status == 1223) {
 					return xmlHttp.responseText;
 				} else {
-					try {
-					
-						// xmlHttp.statusText may throw exception sometimes.
-						status += " " + xmlHttp.statusText;
-					} catch(e){
-					
-					}
-				
-					throw "Network Error: " + status;
+					throw "Network Error(" + status + ")";
 				}
 
 			} catch (e) {

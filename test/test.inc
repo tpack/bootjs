@@ -1,1 +1,1 @@
-<em> This HTML Fragment is included by Boot.js </em>
+<em> This HTML fragment is included by Boot.js </em>
