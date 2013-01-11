@@ -32,10 +32,12 @@
 		
 		// Do not load twice.
 		if(!include.isLoaded(url, extension)){
-			include.fileExtensions[extension](url);
 			
 			// Mark as loaded.
 			include.loaded.push(url);
+			
+			// Do load.
+			include.fileExtensions[extension](url);
 		}
 	}
 	
@@ -47,16 +49,21 @@
 		loaded: [],
 		
 		/**
-		 * The root path used by include. Default to the parent directory of boot.js.
+		 * The root path used by include. Default to the parent directory of boot.js.The path should not be end with "/".
 		 */
 		basePath: (function () {
 			try {
 				var scripts = document.getElementsByTagName("script");
-				return getAbsoluteUrl(scripts[scripts.length - 1], 'src').replace(/\/[^\/]*$/, "/");
+				return getAbsoluteUrl(scripts[scripts.length - 1], 'src').replace(/\/[^\/]*$/, "");
 			} catch (e) {
 				return "";
 			}
 		})(),
+		
+		/**
+		 * The current path used by include. Default to the directory of current page.The path should not be end with "/".
+		 */
+		currentPath: location.protocol + '//' + location.host + location.pathname.replace(/\/[^\/]*$/, ""),
 	
 		/**
 		 * Get the actually url of specified module path.
@@ -65,10 +72,10 @@
 			
 			// If modulePath starts with '~', replace '~' with current html path.
 			// If modulePath is relative path. Concat modulePath with basePath.
-			if(modulePath.charAt(0) === '~') {
-				modulePath = modulePath.replace('~', location.protocol + '//' + location.host + location.pathname.replace(/\/[^\/]*$/, ""));
+			if(modulePath.substr(0, 2) === '~/') {
+				modulePath = modulePath.replace('~/', include.currentPath + "/");
 			} else if(!/:\/\//.test(modulePath)) {
-				modulePath = include.basePath + modulePath;
+				modulePath = include.basePath + "/" + modulePath;
 			}
 			
 			// Remove "/./" in path
