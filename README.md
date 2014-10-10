@@ -5,9 +5,8 @@ BootJs is a synchroniaed module loader for browsers. Differs from asynchronous m
 
 ## Features
 
-1. Besides js，BootJs supports loading css、html as well.
-2. Compatible with any existing js/css/html files. All files can be generated as an AMD/CMD module.
-3. No extra config files or constraint! 
+1. Support both js and css.
+2. No extra config files required! 
 4. Not support cross domain loading due to limit of XMLHttpRequest.
 
 ## Examples
@@ -17,23 +16,17 @@ Here we have such files:
     test/
      |-- assets
      |    |-- boot.js
-     |    |-- func.css
-     |    `-- func.js
-     |-- include
-     |    `-- page.inc
+     |    |-- page.css
+     |    `-- page.js
      |-- page.html
     
 In page.html, use code below:
 
-    <script>
-      include("func.js");   // include JavaScript file(same as import in java)
-      include("func.css");  // include CSS file
-      include("~/include/page.inc"); // include HTML fragment(same as <? include() ?> in php), in which ~ equals to the path of current html.
-	  
-	  // "func.js" is already executed, we can use variables in "func.js" directly here.
-    </script>
+    <script src="assets/boot.js" data-main="page.js, page.css"></script>
+
+page.js and page.css will be loaded by boot.js
 	
-For more information, view the [document page](https://github.com/bootjs/bootjs/wiki/api).
+For more information, view the [document page](https://github.com/bootjs/bootjs/wiki/usage).
 
 ## Build
 
